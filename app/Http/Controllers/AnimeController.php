@@ -4,82 +4,60 @@ namespace App\Http\Controllers;
 
 use App\Anime;
 use Illuminate\Http\Request;
+use Carbon\Carbon; //utilizando a biblioteca Carbon
+use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;//autenticação
 
 class AnimeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $animes = Anime::all();
+        return view('list', compact('animes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function showfavorites()
     {
-        //
+        $user = Auth::user();
+        if($user == null){
+            return redirect('login');
+        }else{
+            $animes = DB::table('animes')
+                ->join('favoritos' ,'animes.anime_id', '=', 'favoritos.anime_id')
+                ->where('favoritos.user_id', '=', $user->id)->get();
+
+                return view('favorites', compact('animes'));
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function storeFavorite($id)
     {
-        //
+        $user = Auth::user();
+        $anime = DB::table('animes')->where('anime_id', '=', $id)->first();
+        if($user == null){
+            return redirect('login');
+        }else{
+            if(isset($anime)){
+                DB::table('favoritos')->insert([
+                    'user_id' => $user->id,
+                    'anime_id' => $anime->anime_id,
+                ]);
+                $animes = DB::table('animes')
+                    ->join('favoritos' ,'animes.anime_id', '=', 'favoritos.anime_id')
+                    ->where('favoritos.user_id', '=', $user->id)->get();
+
+                return view('favorites', compact('animes'));
+            }else{
+                return redirect('home');
+            }
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Anime  $anime
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Anime $anime)
+    public function show($id)
     {
-        //
+        $anime = DB::table('animes')->where('anime_id', '=', $id)->first();
+        return view('info', compact('anime'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Anime  $anime
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Anime $anime)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Anime  $anime
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Anime $anime)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Anime  $anime
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Anime $anime)
-    {
-        //
-    }
 }

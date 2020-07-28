@@ -16,14 +16,15 @@ class Animes extends Migration
         Schema::create('animes', function (Blueprint $table) {
             $table->bigIncrements('anime_id');
             $table->bigInteger('mal_id');
-            $table->string('title_english');
+            $table->string('title');
+            $table->string('title_english')->nullable();
             $table->string('title_japanese')->nullable();
-            $table->integer('episodes');
-            $table->float('score');
-            $table->bigInteger('scored_by');
-            $table->longText('synopsis');
-            $table->string('url');
-            $table->string('image_url');
+            $table->integer('episodes')->nullable();
+            $table->float('score')->nullable();
+            $table->bigInteger('scored_by')->nullable();
+            $table->longText('synopsis')->nullable();
+            $table->string('url')->nullable();
+            $table->string('image_url')->nullable();
             //categorias
             $table->rememberToken();
             $table->timestamps();

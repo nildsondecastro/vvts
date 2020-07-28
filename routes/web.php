@@ -13,8 +13,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Auth::routes();
 
-Route::get('teste', 'HomeController@teste')->name('teste');
+Route::get('/', function () {
+    return redirect('home');
+});
+Route::get('/home', function () {
+    return view('home');
+})->name('home');
+
+Route::get('/list/anime', 'AnimeController@index')->name('anime.index');
+Route::get('/list/anime/visited', 'AnimeController@index')->name('anime.index');
+Route::get('/list/anime/top', 'AnimeController@index')->name('anime.index');
+Route::get('/show/{id}', 'AnimeController@show')->name('anime.show');
+Route::get('favorited/{id}', 'AnimeController@storeFavorite')->name('favorited');
+Route::get('/favorites', 'AnimeController@showfavorites')->name('favorites');
+
+
+Route::get('/profile', 'HomeController@profile')->name('profile');
+
+
+Route::get('/teste', function () {
+    return view('teste');
+});
+//Route::get('teste', 'HomeController@teste')->name('teste');

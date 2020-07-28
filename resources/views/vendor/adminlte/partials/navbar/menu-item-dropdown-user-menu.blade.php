@@ -62,6 +62,7 @@
 
         {{-- User menu footer --}}
         <li class="user-footer">
+            
             @if($profile_url)
                 <a href="{{ $profile_url }}" class="btn btn-default btn-flat">
                     <i class="fa fa-fw fa-user"></i>
