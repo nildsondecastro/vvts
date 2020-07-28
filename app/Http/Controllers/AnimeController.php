@@ -20,38 +20,39 @@ class AnimeController extends Controller
     public function showfavorites()
     {
         $user = Auth::user();
-        if($user == null){
-            return redirect('login');
-        }else{
-            $animes = DB::table('animes')
-                ->join('favoritos' ,'animes.anime_id', '=', 'favoritos.anime_id')
-                ->where('favoritos.user_id', '=', $user->id)->get();
-
-                return view('favorites', compact('animes'));
-        }
+        $animes = DB::table('animes')
+            ->join('favoritos' ,'animes.anime_id', '=', 'favoritos.anime_id')
+            ->where('favoritos.user_id', '=', $user->id)->get();
+            
+        return view('favorites', compact('animes'));
+        
     }
 
     public function storeFavorite($id)
     {
         $user = Auth::user();
         $anime = DB::table('animes')->where('anime_id', '=', $id)->first();
-        if($user == null){
-            return redirect('login');
-        }else{
-            if(isset($anime)){
+        
+        if(isset($anime)){
+            try {
                 DB::table('favoritos')->insert([
                     'user_id' => $user->id,
                     'anime_id' => $anime->anime_id,
                 ]);
+            } catch (\Throwable $th) {
+                return redirect('home');
+            }
+
                 $animes = DB::table('animes')
                     ->join('favoritos' ,'animes.anime_id', '=', 'favoritos.anime_id')
                     ->where('favoritos.user_id', '=', $user->id)->get();
 
                 return view('favorites', compact('animes'));
-            }else{
-                return redirect('home');
-            }
+            
+        }else{
+            return redirect('home');
         }
+        
     }
 
     public function show($id)

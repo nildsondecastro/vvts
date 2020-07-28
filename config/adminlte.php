@@ -284,6 +284,25 @@ return [
             'url'  => '/list/anime/top',
             'icon' => 'fas fa-fw fa-list',
         ],
+        ['header' => 'Categories'],
+        [
+            'text'    => 'Categories',
+            'icon'    => 'fas fa-fw fa-user',
+            'submenu' => [
+                [
+                    'text' => 'Action',
+                    'url'  => '#',
+                ],
+                [
+                    'text' => 'Adventure',
+                    'url'  => '#',
+                ],
+                [
+                    'text' => 'Comedy',
+                    'url'  => '#',
+                ],
+            ],
+        ],
         //[
         //    'text'    => 'multilevel',
         //    'icon'    => 'fas fa-fw fa-share',

@@ -22,6 +22,7 @@ class Favoritos extends Migration
         Schema::table('favoritos', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('anime_id')->references('anime_id')->on('animes')->onDelete('cascade');
+            $table->index(['user_id', 'anime_id']);
         });
     }
 

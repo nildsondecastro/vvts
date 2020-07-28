@@ -12,10 +12,7 @@ class HomeController extends Controller
 {
     public function profile(){
         $user = Auth::user();
-        if($user == null){
-            return redirect('login');
-        }else{
-            return view('profile', compact('user'));
-        }
+        return view('profile', compact('user'));
+        
     }
 }
